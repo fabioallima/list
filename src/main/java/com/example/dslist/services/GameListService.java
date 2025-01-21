@@ -1,9 +1,13 @@
 package com.example.dslist.services;
 
+import com.example.dslist.Mappers.GameListMapper;
 import com.example.dslist.Mappers.GameMapper;
 import com.example.dslist.dto.GameDTO;
+import com.example.dslist.dto.GameListDTO;
 import com.example.dslist.dto.GameMinDTO;
 import com.example.dslist.entities.Game;
+import com.example.dslist.entities.GameList;
+import com.example.dslist.repositories.GameListRepository;
 import com.example.dslist.repositories.GameRepository;
 import com.example.dslist.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,26 +17,20 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class GameServices {
+public class GameListService {
 
     @Autowired
-    private GameRepository gameRepository;
+    private GameListRepository gameListRepository;
 
     @Autowired
-    private GameMapper gameMapper;
+    private GameListMapper gameListMapper;
 
     @Transactional(readOnly = true)
-    public List<GameMinDTO> findAll() {
-        List<Game> result = gameRepository.findAll();
+    public List<GameListDTO> findAll() {
+        List<GameList> result = gameListRepository.findAll();
         return result.stream()
-                .map(x -> new GameMinDTO(x))
+                .map(x -> gameListMapper.gameListToGameListDTO(x))
                 .toList();
-    }
-
-    @Transactional(readOnly = true)
-    public GameDTO findById(Long id){
-        Game result = gameRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Game not found"));
-        return gameMapper.gameToGameDTO(result);
     }
 
 }
