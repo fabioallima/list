@@ -11,6 +11,8 @@ import com.example.dslist.projections.GameMinProjection;
 import com.example.dslist.repositories.GameRepository;
 import com.example.dslist.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,15 +34,11 @@ public class GameService {
     GamesListMinMapper gamesListMinMapper;
 
     @Transactional(readOnly = true)
-    public List<GameMinDTO> findAll() {
-        List<Game> result = gameRepository.findAll();
-//        return result.stream()
-//                .map(x -> new GameMinDTO(x))
-//                .toList();
+    public Page<GameMinDTO> findAll(Pageable pageable) {
+        Page<Game> result = gameRepository.findAll(pageable);
 
-        return result.stream()
-                .map(x -> gameMinMapper.gameToGameMinDTO(x))
-                .toList();
+        return result
+                .map(x -> gameMinMapper.gameToGameMinDTO(x));
     }
 
     @Transactional(readOnly = true)

@@ -31,7 +31,7 @@ public class GameListController {
 
     @GetMapping(value = "/{listId}/games")
     public List<GamesListMinDTO> findbyList(@PathVariable Long listId) {
-        List<GamesListMinDTO> result = gameService.findByListJPQL(listId);
+        List<GamesListMinDTO> result = gameService.findByList(listId);
         return result;
     }
 
