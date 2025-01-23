@@ -1,6 +1,5 @@
 package com.example.dslist.repositories;
 
-import com.example.dslist.dto.GameMinDTO;
 import com.example.dslist.dto.GamesListMinDTO;
 import com.example.dslist.entities.Game;
 import com.example.dslist.projections.GameMinProjection;

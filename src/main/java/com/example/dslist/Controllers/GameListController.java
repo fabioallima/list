@@ -1,6 +1,8 @@
 package com.example.dslist.Controllers;
 
-import com.example.dslist.dto.*;
+import com.example.dslist.dto.GameListDTO;
+import com.example.dslist.dto.GamesListMinDTO;
+import com.example.dslist.dto.ReplacementDTO;
 import com.example.dslist.services.GameListService;
 import com.example.dslist.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
