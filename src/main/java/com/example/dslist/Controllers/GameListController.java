@@ -6,6 +6,7 @@ import com.example.dslist.dto.ReplacementDTO;
 import com.example.dslist.services.GameListService;
 import com.example.dslist.services.GameService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -31,6 +32,7 @@ public class GameListController {
         return result;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_OPERATOR')")
     @PostMapping(value = "/{listId}/replacement")
     public void move(@PathVariable Long listId, @RequestBody ReplacementDTO body) {
         gameListService.move(listId, body.sourceIndex(), body.destinationIndex());
