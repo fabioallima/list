@@ -43,19 +43,23 @@ public class ResourceServerConfig {
 	@Bean
 	@Order(3)
 	SecurityFilterChain rsSecurityFilterChain(HttpSecurity http) throws Exception {
+		http
+				.csrf(csrf -> csrf.disable())
+				.authorizeHttpRequests(authorize -> authorize
+						.requestMatchers("/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+						.anyRequest().permitAll()
+				)
+				.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()))
+				.cors(cors -> cors.configurationSource(corsConfigurationSource()))
+				.addFilterBefore(new CorsFilter(corsConfigurationSource()), CorsFilter.class)
+				.exceptionHandling(exh -> exh
+						.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+						.accessDeniedHandler(new CustomAccessDeniedHandler())
+				);
 
-		http.csrf(csrf -> csrf.disable());
-		http.authorizeHttpRequests(authorize -> authorize.anyRequest().permitAll());
-		http.oauth2ResourceServer(oauth2ResourceServer -> oauth2ResourceServer.jwt(Customizer.withDefaults()));
-		http.cors(cors -> cors.configurationSource(corsConfigurationSource()));
-		
-		http.addFilterBefore(new CorsFilter(corsConfigurationSource()), CorsFilter.class);
-		
-		http.exceptionHandling(exh -> exh.authenticationEntryPoint(new CustomAuthenticationEntryPoint()));
-		http.exceptionHandling(exh -> exh.accessDeniedHandler(new CustomAccessDeniedHandler()));
-		
 		return http.build();
 	}
+
 
 	@Bean
 	JwtAuthenticationConverter jwtAuthenticationConverter() {
