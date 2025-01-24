@@ -1,4 +1,4 @@
-package com.example.dslist.Controllers;
+package com.example.dslist.controllers;
 
 import com.example.dslist.dto.UserDTO;
 import com.example.dslist.dto.UserInsertDTO;

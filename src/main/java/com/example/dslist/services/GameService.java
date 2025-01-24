@@ -1,8 +1,8 @@
 package com.example.dslist.services;
 
-import com.example.dslist.Mappers.GameMapper;
-import com.example.dslist.Mappers.GameMinMapper;
-import com.example.dslist.Mappers.GamesListMinMapper;
+import com.example.dslist.mappers.GameMapper;
+import com.example.dslist.mappers.GameMinMapper;
+import com.example.dslist.mappers.GamesListMinMapper;
 import com.example.dslist.dto.GameDTO;
 import com.example.dslist.dto.GameMinDTO;
 import com.example.dslist.dto.GamesListMinDTO;

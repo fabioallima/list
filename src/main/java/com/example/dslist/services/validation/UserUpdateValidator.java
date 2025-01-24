@@ -3,7 +3,7 @@ package com.example.dslist.services.validation;
 import com.example.dslist.dto.UserUpdateDTO;
 import com.example.dslist.entities.User;
 import com.example.dslist.repositories.UserRepository;
-import com.example.dslist.Controllers.exceptions.FieldMessage;
+import com.example.dslist.controllers.exceptions.FieldMessage;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;

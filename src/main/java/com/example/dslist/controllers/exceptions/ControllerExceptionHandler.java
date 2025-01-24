@@ -1,4 +1,4 @@
-package com.example.dslist.Controllers.exceptions;
+package com.example.dslist.controllers.exceptions;
 
 import com.example.dslist.services.exceptions.ResourceNotFoundException;
 import jakarta.servlet.http.HttpServletRequest;

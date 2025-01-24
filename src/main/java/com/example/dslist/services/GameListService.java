@@ -1,6 +1,6 @@
 package com.example.dslist.services;
 
-import com.example.dslist.Mappers.GameListMapper;
+import com.example.dslist.mappers.GameListMapper;
 import com.example.dslist.dto.GameListDTO;
 import com.example.dslist.entities.GameList;
 import com.example.dslist.projections.GameMinProjection;

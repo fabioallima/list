@@ -1,4 +1,4 @@
-package com.example.dslist.Mappers;
+package com.example.dslist.mappers;
 
 import com.example.dslist.dto.GameListDTO;
 import com.example.dslist.entities.GameList;

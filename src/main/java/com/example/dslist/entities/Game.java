@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "tb_game")
