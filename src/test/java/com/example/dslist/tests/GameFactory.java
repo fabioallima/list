@@ -5,7 +5,7 @@ import com.example.dslist.dto.GameMinDTO;
 import com.example.dslist.dto.GamesListMinDTO;
 import com.example.dslist.entities.Game;
 
-public class Factory {
+public class GameFactory {
     public static Game createGame() {
         return new Game(1L, "Jogo Teste", 2022, "Gênero Teste", "Plataforma Teste", 4.5, "Descrição Curta Teste", "Descrição Longa Teste", "http://teste.com/imagem.jpg");
     }

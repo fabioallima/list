@@ -9,8 +9,10 @@ import com.example.dslist.mappers.GameMinMapper;
 import com.example.dslist.mappers.GamesListMinMapper;
 import com.example.dslist.projections.GameMinProjection;
 import com.example.dslist.repositories.GameRepository;
+import com.example.dslist.services.exceptions.DatabaseException;
 import com.example.dslist.services.exceptions.ResourceNotFoundException;
-import com.example.dslist.tests.Factory;
+import com.example.dslist.tests.GameFactory;
+import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -19,11 +21,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.List;
 import java.util.Optional;
@@ -57,17 +60,19 @@ public class GameServiceTests {
     private GamesListMinDTO gamesListMinDTO;
     private long existingId;
     private long nonExistingId;
+    private long dependentId;
     private long existingListId;
     private long nonExistingListId;
 
     @BeforeEach
     void setUp() {
-        game = Factory.createGame();
-        gameMinDTO = Factory.createGameMinDTO();
-        gameDTO = Factory.createGameDTO();
-        gamesListMinDTO = Factory.createGamesListMinDTO();
+        game = GameFactory.createGame();
+        gameMinDTO = GameFactory.createGameMinDTO();
+        gameDTO = GameFactory.createGameDTO();
+        gamesListMinDTO = GameFactory.createGamesListMinDTO();
         existingId = 1L;
         nonExistingId = 2L;
+        dependentId = 3L;
         existingListId = 1L;
         nonExistingListId = 99L;
     }
@@ -118,17 +123,7 @@ public class GameServiceTests {
         Mockito.verify(repository, times(1)).findById(nonExistingId);
     }
 
-    /*@Test
-    public void findByListReturnGamesListMinDTOWhenListIdExists(){
-        List<GamesListMinDTO> list = List.of(gamesListMinDTO);
-
-        Mockito.when(repository.searchByList(existingListId)).thenReturn(list);
-        Mockito.when(gamesListMinMapper.projectionToDto(any(GameMinProjection.class))).thenReturn(gamesListMinDTO);
-
-        List<GamesListMinDTO> result = service.findByList(existingListId);
-        Assertions.assertNotNull(result);
-    }*/
-
+    @Test
     public void findByListShouldReturnGamesListMinDTOWhenListIdExists() {
         List<GameMinProjection> projections = List.of(mock(GameMinProjection.class));
         List<GamesListMinDTO> expectedList = List.of(gamesListMinDTO);
@@ -180,6 +175,69 @@ public class GameServiceTests {
         Assertions.assertNotNull(result);
         Assertions.assertTrue(result.isEmpty());
         Mockito.verify(repository).searchByListJPQL(nonExistingListId);
+    }
+
+    @Test
+    void insertShouldReturnGameDTOWhenSuccessful() {
+        Mockito.when(gameMapper.gameDTOToGame(gameDTO)).thenReturn(game);
+        Mockito.when(repository.save(game)).thenReturn(game);
+        Mockito.when(gameMapper.gameToGameDTO(game)).thenReturn(gameDTO);
+
+        GameDTO result = service.insert(gameDTO);
+
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(existingId, result.id());
+        Assertions.assertEquals(gameDTO.title(), result.title());
+        Mockito.verify(gameMapper).gameDTOToGame(gameDTO);
+        Mockito.verify(repository).save(game);
+        Mockito.verify(gameMapper).gameToGameDTO(game);
+    }
+
+    @Test
+    void updateShouldReturnUpdatedGameDTO() {
+        Mockito.when(repository.getReferenceById(existingId)).thenReturn(game);
+        Mockito.doNothing().when(gameMapper).updateGameFromDTO(gameDTO, game);
+        Mockito.when(repository.save(any(Game.class))).thenReturn(game);
+        Mockito.when(gameMapper.gameToGameDTO(game)).thenReturn(gameDTO);
+
+        // Act
+        GameDTO result = service.update(existingId, gameDTO);
+
+        // Assert
+        Assertions.assertNotNull(result);
+        Mockito.verify(repository).getReferenceById(existingId);
+        Mockito.verify(gameMapper).updateGameFromDTO(gameDTO, game);
+        Mockito.verify(repository).save(game);
+        Mockito.verify(gameMapper).gameToGameDTO(any(Game.class));
+    }
+
+    @Test
+    void updateShouldThrowResourceNotFoundExceptionWhenGameDoesNotExist() {
+
+        Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
+
+        Assertions.assertThrows(ResourceNotFoundException.class, () -> service.update(nonExistingId, gameDTO));
+        Mockito.verify(repository).getReferenceById(nonExistingId);
+        Mockito.verifyNoInteractions(gameMapper);
+    }
+
+    @Test
+    void deleteShouldDoNothingWhenIdExists() {
+        Mockito.doNothing().when(repository).deleteById(existingId);
+
+        Assertions.assertDoesNotThrow(() -> service.delete(existingId));
+
+        Mockito.verify(repository, times(1)).deleteById(existingId);
+    }
+
+    @Test
+    void deleteShouldThrowDatabaseExceptionWhenDependentId() {
+        doThrow(DataIntegrityViolationException.class)
+                .when(repository).deleteById(dependentId);
+
+        assertThrows(DatabaseException.class, () -> service.delete(dependentId));
+
+        verify(repository, times(1)).deleteById(dependentId);
     }
 }
 

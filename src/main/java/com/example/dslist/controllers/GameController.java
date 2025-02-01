@@ -2,6 +2,7 @@ package com.example.dslist.controllers;
 
 import com.example.dslist.dto.GameDTO;
 import com.example.dslist.dto.GameMinDTO;
+import com.example.dslist.dto.UserDTO;
 import com.example.dslist.services.GameService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import org.springframework.data.web.PagedResourcesAssembler;
@@ -66,10 +68,27 @@ public class GameController {
         return result;
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_OPERATOR', 'ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<GameDTO> insert(@Valid @RequestBody GameDTO dto){
         GameDTO gameDTO = gameService.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(dto.id()).toUri();
         return ResponseEntity.created(uri).body(gameDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_OPERATOR', 'ROLE_ADMIN')")
+    @PutMapping(value = "/{id}")
+    public ResponseEntity<GameDTO> update(@PathVariable Long id, @RequestBody @Valid GameDTO dto) {
+        GameDTO gameDTO = gameService.update(id, dto);
+
+        return ResponseEntity.ok().body(gameDTO);
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_OPERATOR', 'ROLE_ADMIN')")
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        gameService.delete(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
