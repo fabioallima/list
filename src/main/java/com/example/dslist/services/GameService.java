@@ -10,6 +10,7 @@ import com.example.dslist.entities.Game;
 import com.example.dslist.projections.GameMinProjection;
 import com.example.dslist.repositories.GameRepository;
 import com.example.dslist.services.exceptions.ResourceNotFoundException;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -61,4 +62,11 @@ public class GameService {
         return result;
     }
 
+    @Transactional
+    public GameDTO insert(GameDTO dto) {
+        Game entity = gameMapper.gameDTOToGame(dto);
+        entity = gameRepository.save(entity);
+
+        return gameMapper.gameToGameDTO(entity);
+    }
 }
