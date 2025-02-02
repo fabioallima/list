@@ -193,8 +193,11 @@
 						<exclude>com/example/dslist/config/**</exclude>
 						<exclude>com/example/dslist/entities/**</exclude>
 						<exclude>com/example/dslist/dto/**</exclude>
+						<exclude>com/example/dslist/mappers/**</exclude>
 						<exclude>com/example/dslist/controllers/handlers/**</exclude>
+						<exclude>com/example/dslist/controllers/exceptions/**</exclude>
 						<exclude>com/example/dslist/services/exceptions/**</exclude>
+						<exclude>com/example/dslist/services/validation/**</exclude>
 					</excludes>
 				</configuration>
 				<executions>
