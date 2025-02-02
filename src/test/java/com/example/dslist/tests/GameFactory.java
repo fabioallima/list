@@ -4,10 +4,15 @@ import com.example.dslist.dto.GameDTO;
 import com.example.dslist.dto.GameMinDTO;
 import com.example.dslist.dto.GamesListMinDTO;
 import com.example.dslist.entities.Game;
+import com.example.dslist.entities.GameList;
 
 public class GameFactory {
     public static Game createGame() {
         return new Game(1L, "Jogo Teste", 2022, "Gênero Teste", "Plataforma Teste", 4.5, "Descrição Curta Teste", "Descrição Longa Teste", "http://teste.com/imagem.jpg");
+    }
+
+    public static GameList createGameList(){
+        return new GameList(1L, "Test List");
     }
 
     public static GameMinDTO createGameMinDTO() {
