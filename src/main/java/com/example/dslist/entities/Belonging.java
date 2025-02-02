@@ -1,19 +1,20 @@
 package com.example.dslist.entities;
 
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "tb_belonging")
 public class Belonging {
     @EmbeddedId
-    private BelogingPK id = new BelogingPK();
+    private BelongingPK id = new BelongingPK();
 
     private Integer position;
 
