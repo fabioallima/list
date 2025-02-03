@@ -12,6 +12,7 @@ import com.example.dslist.repositories.GameRepository;
 import com.example.dslist.services.exceptions.DatabaseException;
 import com.example.dslist.services.exceptions.ResourceNotFoundException;
 import com.example.dslist.tests.GameFactory;
+import com.example.dslist.tests.GameListFactory;
 import jakarta.persistence.EntityNotFoundException;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -69,7 +70,7 @@ public class GameServiceTests {
         game = GameFactory.createGame();
         gameMinDTO = GameFactory.createGameMinDTO();
         gameDTO = GameFactory.createGameDTO();
-        gamesListMinDTO = GameFactory.createGamesListMinDTO();
+        gamesListMinDTO = GameListFactory.createGamesListMinDTO();
         existingId = 1L;
         nonExistingId = 2L;
         dependentId = 3L;

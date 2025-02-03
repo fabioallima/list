@@ -39,9 +39,6 @@ public class GameListService {
         GameMinProjection obj = list.remove(sourceIndex);
         list.add(destinationIndex, obj);
 
-        //int min = sourceIndex < destinationIndex ? sourceIndex : destinationIndex;
-        //int max = sourceIndex < destinationIndex ? destinationIndex : sourceIndex;
-
         int min = Math.min(sourceIndex, destinationIndex);
         int max = Math.max(sourceIndex, destinationIndex);
 

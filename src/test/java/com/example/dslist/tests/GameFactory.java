@@ -11,9 +11,7 @@ public class GameFactory {
         return new Game(1L, "Jogo Teste", 2022, "Gênero Teste", "Plataforma Teste", 4.5, "Descrição Curta Teste", "Descrição Longa Teste", "http://teste.com/imagem.jpg");
     }
 
-    public static GameList createGameList(){
-        return new GameList(1L, "Test List");
-    }
+
 
     public static GameMinDTO createGameMinDTO() {
         return new GameMinDTO(1L, "Jogo Teste", 2022, "http://teste.com/imagem.jpg", "Descrição Curta Teste");
@@ -23,7 +21,5 @@ public class GameFactory {
         return new GameDTO(1L, "Test Game", 2023, "Action", "PC, PS5", 9.5, "http://example.com/image.jpg", "A short description", "A longer description of the game");
     }
 
-    public static GamesListMinDTO createGamesListMinDTO() {
-        return new GamesListMinDTO(1L, "Test Game", 2023, "http://teste.com/imagem.jpg", "Short Description", 1);
-    }
+
 }

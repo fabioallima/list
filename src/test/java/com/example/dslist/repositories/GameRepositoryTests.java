@@ -5,6 +5,7 @@ import com.example.dslist.entities.Game;
 import com.example.dslist.entities.GameList;
 import com.example.dslist.projections.GameMinProjection;
 import com.example.dslist.tests.GameFactory;
+import com.example.dslist.tests.GameListFactory;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -69,14 +70,14 @@ public class GameRepositoryTests {
 
     @Test
     void searchByListShouldReturnGameMinProjections() {
-        gameList = GameFactory.createGameList();
+        gameList = GameListFactory.createGameList();
         List<GameMinProjection> result = repository.searchByList(gameList.getId());
         Assertions.assertNotNull(result);
     }
 
     @Test
     void searchByListJPQLShouldReturnGamesListMinDTOs() {
-        gameList = GameFactory.createGameList();
+        gameList = GameListFactory.createGameList();
         List<GamesListMinDTO> result = repository.searchByListJPQL(gameList.getId());
         Assertions.assertNotNull(result);
     }
