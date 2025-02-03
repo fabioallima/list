@@ -79,7 +79,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findAllPagedShouldReturnPage() {
+    public void findAllPaged_ShouldReturnPage() {
         Pageable pageable = PageRequest.of(0, 12);
         List<Game> games = List.of(game);
         Page<Game> page = new PageImpl<>(games);
@@ -101,7 +101,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findByIdShouldReturnGameDTOWhenIdExists() {
+    public void findById_ShouldReturnGameDTO_WhenIdExists() {
         Mockito.when(repository.findById(existingId)).thenReturn(Optional.of(game));
         Mockito.when(gameMapper.gameToGameDTO(game)).thenReturn(gameDTO);
 
@@ -114,7 +114,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findByIdShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+    public void findById_ShouldThrowResourceNotFoundException_WhenIdDoesNotExist() {
         Mockito.when(repository.findById(nonExistingId)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> {
@@ -125,7 +125,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findByListShouldReturnGamesListMinDTOWhenListIdExists() {
+    public void findByList_ShouldReturnGamesListMinDTO_WhenListIdExists() {
         List<GameMinProjection> projections = List.of(mock(GameMinProjection.class));
         List<GamesListMinDTO> expectedList = List.of(gamesListMinDTO);
 
@@ -142,7 +142,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findByListShouldReturnEmptyListWhenListIdDoesNotExist() {
+    public void findByList_ShouldReturnEmptyList_WhenListIdDoesNotExist() {
         Mockito.when(repository.searchByList(nonExistingListId)).thenReturn(List.of());
 
         List<GamesListMinDTO> result = service.findByList(nonExistingListId);
@@ -154,7 +154,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findByListJPQLShouldReturnGamesListMinDTOWhenListIdExists() {
+    public void findByListJPQL_ShouldReturnGamesListMinDTO_WhenListIdExists() {
         List<GamesListMinDTO> expectedList = List.of(gamesListMinDTO);
 
         Mockito.when(repository.searchByListJPQL(existingListId)).thenReturn(expectedList);
@@ -168,7 +168,7 @@ public class GameServiceTests {
     }
 
     @Test
-    public void findByListJPQLShouldReturnEmptyListWhenListIdDoesNotExist() {
+    public void findByListJPQL_ShouldReturnEmptyList_WhenListIdDoesNotExist() {
         Mockito.when(repository.searchByListJPQL(nonExistingListId)).thenReturn(List.of());
 
         List<GamesListMinDTO> result = service.findByListJPQL(nonExistingListId);
@@ -179,7 +179,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void insertShouldReturnGameDTOWhenSuccessful() {
+    void insert_ShouldReturnGameDTO_WhenSuccessful() {
         Mockito.when(gameMapper.gameDTOToGame(gameDTO)).thenReturn(game);
         Mockito.when(repository.save(game)).thenReturn(game);
         Mockito.when(gameMapper.gameToGameDTO(game)).thenReturn(gameDTO);
@@ -195,7 +195,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void updateShouldReturnUpdatedGameDTO() {
+    void update_ShouldReturn_UpdatedGameDTO() {
         Mockito.when(repository.getReferenceById(existingId)).thenReturn(game);
         Mockito.doNothing().when(gameMapper).updateGameFromDTO(gameDTO, game);
         Mockito.when(repository.save(any(Game.class))).thenReturn(game);
@@ -213,7 +213,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void updateShouldThrowResourceNotFoundExceptionWhenGameDoesNotExist() {
+    void update_ShouldThrowResourceNotFoundException_WhenGameDoesNotExist() {
 
         Mockito.when(repository.getReferenceById(nonExistingId)).thenThrow(EntityNotFoundException.class);
 
@@ -223,7 +223,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void deleteShouldDoNothingWhenIdExists() {
+    void delete_ShouldDoNothing_WhenIdExists() {
         Mockito.doNothing().when(repository).deleteById(existingId);
 
         Assertions.assertDoesNotThrow(() -> service.delete(existingId));
@@ -232,7 +232,7 @@ public class GameServiceTests {
     }
 
     @Test
-    void deleteShouldThrowDatabaseExceptionWhenDependentId() {
+    void delete_ShouldThrowDatabaseException_WhenDependentId() {
         doThrow(DataIntegrityViolationException.class)
                 .when(repository).deleteById(dependentId);
 

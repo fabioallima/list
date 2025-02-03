@@ -72,7 +72,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void findAllPagedShouldReturnPageOfUserDTO() {
+    void findAllPaged_ShouldReturnPageOfUserDTO() {
         List<User> users = List.of(user);
         Page<User> page = new PageImpl<>(users);
 
@@ -85,7 +85,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void findByIdShouldReturnUserDTOWhenIdExists() {
+    void findById_ShouldReturnUserDTO_WhenIdExists() {
         Mockito.when(userRepository.findById(1L)).thenReturn(Optional.of(user));
 
         UserDTO result = userService.findById(1L);
@@ -95,14 +95,14 @@ public class UserServiceTests {
     }
 
     @Test
-    void findByIdShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+    void findById_ShouldThrowResourceNotFoundException_WhenIdDoesNotExist() {
         Mockito.when(userRepository.findById(99L)).thenReturn(Optional.empty());
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> userService.findById(99L));
     }
 
     @Test
-    void insertShouldReturnUserDTO() {
+    void insert_ShouldReturnUserDTO() {
         Mockito.when(roleRepository.findByAuthority("ROLE_OPERATOR")).thenReturn(role);
         Mockito.when(passwordEncoder.encode(anyString())).thenReturn("encodedPassword");
         Mockito.when(userRepository.save(any(User.class))).thenReturn(user);
@@ -115,7 +115,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void updateShouldReturnUpdatedUserDTO() {
+    void update_ShouldReturnUpdatedUserDTO() {
         Mockito.when(userRepository.getReferenceById(1L)).thenReturn(user);
         Mockito.when(userRepository.save(any(User.class))).thenReturn(user);
 
@@ -128,18 +128,17 @@ public class UserServiceTests {
     }
 
     @Test
-    void updateShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+    void update_ShouldThrowResourceNotFoundException_WhenIdDoesNotExist() {
         Mockito.when(userRepository.getReferenceById(99L)).thenThrow(EntityNotFoundException.class);
 
         Assertions.assertThrows(ResourceNotFoundException.class, () -> userService.update(99L, userUpdateDTO));
     }
 
     @Test
-    void insertShouldCopyAllFieldsFromDtoToEntity() {
+    void insert_ShouldCopyAllFieldsFromDtoToEntity() {
         List<RoleDTO> roles = List.of(new RoleDTO(1L, "ROLE_OPERATOR"));
         UserInsertDTO insertDTO = UserFactory.createUserInsertDTO(roles);
 
-        //User savedUser = new User();
         Role role = UserFactory.createRole();
 
         Mockito.when(roleRepository.findByAuthority("ROLE_OPERATOR")).thenReturn(role);
@@ -164,15 +163,13 @@ public class UserServiceTests {
     }
 
     @Test
-    void updateShouldCopyAllFieldsFromDtoToEntity() {
+    void update_ShouldCopyAllFieldsFromDtoToEntity() {
         // Arrange
         Long userId = 1L;
         List<RoleDTO> roles = List.of(new RoleDTO(1L, "ROLE_OPERATOR"), new RoleDTO(2L, "ROLE_ADMIN"));
         UserUpdateDTO updateDTO = UserFactory.createUserUpdateDTO(roles);
 
         User existingUser = UserFactory.createUser();
-        //Role operatorRole = new Role(1L, "ROLE_OPERATOR");
-        //Role adminRole = new Role(2L, "ROLE_ADMIN");
 
         Mockito.when(userRepository.getReferenceById(userId)).thenReturn(existingUser);
         Mockito.when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
@@ -190,7 +187,7 @@ public class UserServiceTests {
 
 
     @Test
-    void deleteShouldDoNothingWhenIdExists() {
+    void delete_ShouldDoNothing_WhenIdExists() {
         Long idToDelete = 1L;
         Mockito.doNothing().when(userRepository).deleteById(idToDelete);
 
@@ -200,7 +197,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void deleteShouldThrowResourceNotFoundExceptionWhenIdDoesNotExist() {
+    void delete_ShouldThrowResourceNotFoundException_WhenIdDoesNotExist() {
         Long nonExistingId = 99L;
         Mockito.doThrow(EmptyResultDataAccessException.class).when(userRepository).deleteById(nonExistingId);
 
@@ -208,7 +205,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void deleteShouldThrowDatabaseExceptionWhenDependentId() {
+    void delete_ShouldThrowDatabaseException_WhenDependentId() {
         Long dependentId = 1L;
         Mockito.doThrow(DataIntegrityViolationException.class).when(userRepository).deleteById(dependentId);
 
@@ -216,7 +213,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void loadUserByUsernameShouldReturnUserDetailsWhenUsernameExists() {
+    void loadUserByUsername_ShouldReturnUserDetails_WhenUsernameExists() {
 
         UserDetailsProjection projection = UserFactory.createUserDetailsProjection();
         String existingUsername = projection.getUsername();
@@ -237,7 +234,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void loadUserByUsernameShouldThrowUsernameNotFoundExceptionWhenUsernameDoesNotExist() {
+    void loadUserByUsername_ShouldThrowUsernameNotFoundException_WhenUsernameDoesNotExist() {
         String nonExistingUsername = "nonexisting@example.com";
         Mockito.when(userRepository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(Collections.emptyList());
 
@@ -245,7 +242,7 @@ public class UserServiceTests {
     }
 
     @Test
-    void findProfileShouldReturnAuthenticatedUserDTO() {
+    void findProfile_ShouldReturnAuthenticatedUserDTO() {
         // Arrange
         when(authService.authenticated()).thenReturn(authenticatedUser);
 

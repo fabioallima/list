@@ -49,7 +49,7 @@ class GameListServiceTests {
     }
 
     @Test
-    void findAllShouldReturnListOfGameListDTO() {
+    void findAll_ShouldReturn_ListOfGameListDTO() {
         // Arrange
         when(gameListRepository.findAll()).thenReturn(List.of(gameList1, gameList2));
         when(gameListMapper.gameListToGameListDTO(gameList1)).thenReturn(gameListDTO1);
@@ -68,7 +68,7 @@ class GameListServiceTests {
     }
 
     @Test
-    void moveShouldUpdatePositionsCorrectly() {
+    void move_ShouldUpdate_PositionsCorrectly() {
         // Arrange
         Long listId = 1L;
         int sourceIndex = 0;
