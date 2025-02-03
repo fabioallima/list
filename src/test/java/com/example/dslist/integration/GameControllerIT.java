@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -24,6 +25,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @Transactional
 public class GameControllerIT {
+
+	private static final String URI = "/games";
+	private static final String username = "maria@gmail.com";
+	private static final String password = "123456";
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -38,7 +43,7 @@ public class GameControllerIT {
 	private Long nonExistingId;
 	private Long countTotalGames;
 
-	private String username, password, bearerToken;
+	private String bearerToken;
 
 	@BeforeEach
 	void setUp() throws Exception {
@@ -46,16 +51,13 @@ public class GameControllerIT {
 		nonExistingId = 1000L;
 		countTotalGames = 10L;
 
-		username = "maria@gmail.com";
-		password = "123456";
-
 		bearerToken = tokenUtil.obtainAccessToken(mockMvc, username, password);
 	}
 
 	@Test
 	public void findAllShouldReturnSortedPageWhenSortByName() throws Exception {
 		ResultActions result = mockMvc
-				.perform(get("/games?page=0&size=12&sort=title,asc").accept(MediaType.APPLICATION_JSON));
+				.perform(MockMvcRequestBuilders.get(URI+"?page=0&size=12&sort=title,asc").accept(MediaType.APPLICATION_JSON));
 
 		result.andExpect(status().isOk());
 		result.andExpect(jsonPath("$.page.totalElements").value(countTotalGames));
@@ -69,6 +71,55 @@ public class GameControllerIT {
 	}
 
 	@Test
+	public void findByIdShouldReturnGameDTOWhenIdExists() throws Exception {
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", existingId)
+				.accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isOk());
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.title").exists());
+		result.andExpect(jsonPath("$.shortDescription").exists());
+	}
+
+	@Test
+	public void findByIdShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", nonExistingId)
+				.accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isNotFound());
+	}
+
+	@Test
+	public void insertShouldReturnCreatedAndGameDTOWhenDataIsValid() throws Exception {
+		GameDTO gameDTO = GameFactory.createGameDTO();
+		String jsonBody = objectMapper.writeValueAsString(gameDTO);
+
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
+				.header("Authorization", "Bearer " + bearerToken)
+				.content(jsonBody)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isCreated());
+		result.andExpect(jsonPath("$.id").exists());
+		result.andExpect(jsonPath("$.title").value(gameDTO.title()));
+		result.andExpect(jsonPath("$.shortDescription").value(gameDTO.shortDescription()));
+	}
+
+	@Test
+	public void insertShouldReturnUnauthorizedWhenNoToken() throws Exception {
+		GameDTO gameDTO = GameFactory.createGameDTO();
+		String jsonBody = objectMapper.writeValueAsString(gameDTO);
+
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.post(URI)
+				.content(jsonBody)
+				.contentType(MediaType.APPLICATION_JSON)
+				.accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isUnauthorized());
+	}
+
+	@Test
 	public void updateShouldReturnGameDTOWhenIdExists() throws Exception {
 
 		GameDTO gameDTO = GameFactory.createGameDTO();
@@ -78,7 +129,7 @@ public class GameControllerIT {
 		String expectedShortDescription = gameDTO.shortDescription();
 
 		ResultActions result = mockMvc
-				.perform(put("/games/{id}", existingId)
+				.perform(MockMvcRequestBuilders.put(URI + "/{id}", existingId)
 						.header("Authorization", "Bearer " + bearerToken)
 						.content(jsonBody)
 						.contentType(MediaType.APPLICATION_JSON)
@@ -96,7 +147,7 @@ public class GameControllerIT {
 		GameDTO gameDTO = GameFactory.createGameDTO();
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
 
-		ResultActions result = mockMvc.perform(put("/games/{id}", nonExistingId)
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.put(URI+"/{id}", nonExistingId)
 				.header("Authorization", "Bearer " + bearerToken)
 				.content(jsonBody)
 				.contentType(MediaType.APPLICATION_JSON)
@@ -104,4 +155,22 @@ public class GameControllerIT {
 
 		result.andExpect(status().isNotFound());
 	}
+
+	@Test
+	public void deleteShouldReturnNoContentWhenIdExists() throws Exception {
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/{id}", existingId)
+				.header("Authorization", "Bearer " + bearerToken)
+				.accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isNoContent());
+	}
+
+	@Test
+	public void deleteShouldReturnUnauthorizedWhenNoToken() throws Exception {
+		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/{id}", existingId)
+				.accept(MediaType.APPLICATION_JSON));
+
+		result.andExpect(status().isUnauthorized());
+	}
+
 }
