@@ -13,7 +13,7 @@ import java.util.List;
 public class UserFactory {
 
     public static User createUser() {
-        return new User(1L, "John", "Doe", "john@example.com", "password");
+        return new User(1L, "Paulo", "Pereira", "paulo@example.com", "password");
     }
 
     public static UserDTO createUserDTO() {
@@ -22,18 +22,18 @@ public class UserFactory {
 
     public static UserInsertDTO createUserInsertDTO() {
         UserInsertDTO dto = new UserInsertDTO();
-        dto.setFirstName("Jane");
-        dto.setLastName("Doe");
-        dto.setEmail("jane@example.com");
+        dto.setFirstName("Maria");
+        dto.setLastName("Silva");
+        dto.setEmail("maria@example.com");
         dto.setPassword("password");
         return dto;
     }
 
     public static UserUpdateDTO createUserUpdateDTO() {
         UserUpdateDTO dto = new UserUpdateDTO();
-        dto.setFirstName("John");
-        dto.setLastName("Smith");
-        dto.setEmail("john@example.com");
+        dto.setFirstName("Paulo");
+        dto.setLastName("Pereira");
+        dto.setEmail("paulo@example.com");
         return dto;
     }
 
@@ -43,27 +43,25 @@ public class UserFactory {
 
     public static UserInsertDTO createUserInsertDTO(List<RoleDTO> roles) {
         UserInsertDTO userInsertDTO;
-        Role role;
 
         userInsertDTO = new UserInsertDTO();
-        userInsertDTO.setFirstName("Jane");
-        userInsertDTO.setLastName("Doe");
-        userInsertDTO.setEmail("jane@example.com");
+        userInsertDTO.setFirstName("Maria");
+        userInsertDTO.setLastName("Silva");
+        userInsertDTO.setEmail("maria@example.com");
         userInsertDTO.setPassword("Password123@");
-        role = new Role(1L, "ROLE_OPERATOR");
+        userInsertDTO.getRoles().addAll(roles);
 
         return userInsertDTO;
     }
 
     public static UserUpdateDTO createUserUpdateDTO(List<RoleDTO> roles) {
         UserUpdateDTO userUpdateDTO;
-        Role role;
 
         userUpdateDTO = new UserUpdateDTO();
-        userUpdateDTO.setFirstName("John");
-        userUpdateDTO.setLastName("Smith");
-        userUpdateDTO.setEmail("john@example.com");
-        role = new Role(1L, "ROLE_OPERATOR");
+        userUpdateDTO.setFirstName("Paulo");
+        userUpdateDTO.setLastName("Pereira");
+        userUpdateDTO.setEmail("paulo@example.com");
+        userUpdateDTO.getRoles().addAll(roles);
 
         return userUpdateDTO;
     }

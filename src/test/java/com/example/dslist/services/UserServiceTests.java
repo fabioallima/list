@@ -61,14 +61,16 @@ public class UserServiceTests {
     private UserUpdateDTO userUpdateDTO;
     private User authenticatedUser;
     private Role role;
+    private String nonExistingUsername;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         user = UserFactory.createUser();
         authenticatedUser = UserFactory.createUser();
         userInsertDTO = UserFactory.createUserInsertDTO();
         userUpdateDTO = UserFactory.createUserUpdateDTO();
         role = UserFactory.createRole();
+        nonExistingUsername = "nonexisting@example.com";
     }
 
     @Test
@@ -166,6 +168,7 @@ public class UserServiceTests {
     void update_ShouldCopyAllFieldsFromDtoToEntity() {
         // Arrange
         Long userId = 1L;
+        Long roleId = 1L;
         List<RoleDTO> roles = List.of(new RoleDTO(1L, "ROLE_OPERATOR"), new RoleDTO(2L, "ROLE_ADMIN"));
         UserUpdateDTO updateDTO = UserFactory.createUserUpdateDTO(roles);
 
@@ -173,6 +176,7 @@ public class UserServiceTests {
 
         Mockito.when(userRepository.getReferenceById(userId)).thenReturn(existingUser);
         Mockito.when(userRepository.save(any(User.class))).thenAnswer(invocation -> invocation.getArgument(0));
+        Mockito.when(roleRepository.getReferenceById(roleId)).thenReturn(role);
 
         UserDTO result = userService.update(userId, updateDTO);
 
@@ -235,7 +239,6 @@ public class UserServiceTests {
 
     @Test
     void loadUserByUsername_ShouldThrowUsernameNotFoundException_WhenUsernameDoesNotExist() {
-        String nonExistingUsername = "nonexisting@example.com";
         Mockito.when(userRepository.searchUserAndRolesByEmail(nonExistingUsername)).thenReturn(Collections.emptyList());
 
         Assertions.assertThrows(UsernameNotFoundException.class, () -> userService.loadUserByUsername(nonExistingUsername));

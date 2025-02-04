@@ -1,5 +1,6 @@
 package com.example.dslist.dto;
 
+import com.example.dslist.entities.Role;
 import com.example.dslist.entities.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
