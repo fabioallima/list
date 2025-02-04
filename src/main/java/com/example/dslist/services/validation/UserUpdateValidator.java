@@ -8,12 +8,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerMapping;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Component
 public class UserUpdateValidator implements ConstraintValidator<UserUpdateValid, UserUpdateDTO> {
 	
 	@Autowired

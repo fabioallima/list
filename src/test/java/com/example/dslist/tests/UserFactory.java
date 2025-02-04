@@ -13,7 +13,7 @@ import java.util.List;
 public class UserFactory {
 
     public static User createUser() {
-        return new User(1L, "Paulo", "Pereira", "paulo@example.com", "password");
+        return new User(1L, "Paulo", "Pereira", "paulo@example.com", "v66D~}4@wN5*.a&*nv%p");
     }
 
     public static UserDTO createUserDTO() {
@@ -25,7 +25,7 @@ public class UserFactory {
         dto.setFirstName("Maria");
         dto.setLastName("Silva");
         dto.setEmail("maria@example.com");
-        dto.setPassword("password");
+        dto.setPassword("v66D~}4@wN5*.a&*nv%p");
         return dto;
     }
 
@@ -48,7 +48,7 @@ public class UserFactory {
         userInsertDTO.setFirstName("Maria");
         userInsertDTO.setLastName("Silva");
         userInsertDTO.setEmail("maria@example.com");
-        userInsertDTO.setPassword("Password123@");
+        userInsertDTO.setPassword("v66D~}4@wN5*.a&*nv%p");
         userInsertDTO.getRoles().addAll(roles);
 
         return userInsertDTO;

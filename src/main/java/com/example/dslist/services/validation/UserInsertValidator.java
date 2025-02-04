@@ -7,10 +7,12 @@ import com.example.dslist.controllers.exceptions.FieldMessage;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Component
 public class UserInsertValidator implements ConstraintValidator<UserInsertValid, UserInsertDTO> {
 	
 	@Autowired
