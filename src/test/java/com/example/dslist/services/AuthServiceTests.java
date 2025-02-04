@@ -140,31 +140,6 @@ class AuthServiceTests {
         assertNotNull(result);
         assertEquals(email, result.getEmail());
     }
-/*
-    @Test
-    void authenticated_InvalidUser_ShouldReturnUsernameNotFoundException() {
-        // Arrange
-        Authentication authentication = mock(Authentication.class);
-        SecurityContext securityContext = mock(SecurityContext.class);
-        Jwt jwt = mock(Jwt.class);
-        User user = new User();
-        user.setEmail(email);
-
-        when(securityContext.getAuthentication()).thenReturn(authentication);
-        SecurityContextHolder.setContext(securityContext);
-        when(authentication.getPrincipal()).thenReturn(jwt);
-        when(jwt.getClaim("username")).thenReturn(email);
-        when(userRepository.findByEmail(email)).thenThrow(UsernameNotFoundException.class);
-
-        // Act
-        User result = authService.authenticated();
-
-        // Assert
-        Assertions.assertThrows(UsernameNotFoundException.class, () -> userRepository.findByEmail(email));
-        Mockito.verify(userRepository).findByEmail(email);
-        //Mockito.verifyNoInteractions(gameMapper);
-
-    }*/
 
     @Test
     void authenticated_InvalidUser_ShouldThrowUsernameNotFoundException() {
