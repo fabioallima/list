@@ -29,6 +29,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(value = GameController.class, excludeAutoConfiguration = {SecurityAutoConfiguration.class})
 public class GameControllerTests {
+	private static final String URI = "/games";
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -76,7 +77,7 @@ public class GameControllerTests {
 	public void deleteShouldReturnNoContentWhenIdExists() throws Exception {
 		
 		ResultActions result = 
-				mockMvc.perform(delete("/games/{id}", existingId)
+				mockMvc.perform(delete(URI + "/{id}", existingId)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNoContent());
@@ -86,7 +87,7 @@ public class GameControllerTests {
 	public void deleteShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
 		
 		ResultActions result = 
-				mockMvc.perform(delete("/games/{id}", nonExistingId)
+				mockMvc.perform(delete(URI + "/{id}", nonExistingId)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNotFound());
@@ -98,7 +99,7 @@ public class GameControllerTests {
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
 		
 		ResultActions result = 
-				mockMvc.perform(post("/games")
+				mockMvc.perform(post(URI)
 					.content(jsonBody)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON));
@@ -115,7 +116,7 @@ public class GameControllerTests {
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
 		
 		ResultActions result = 
-				mockMvc.perform(put("/games/{id}", existingId)
+				mockMvc.perform(put(URI + "/{id}", existingId)
 					.content(jsonBody)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON));
@@ -132,7 +133,7 @@ public class GameControllerTests {
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
 		
 		ResultActions result = 
-				mockMvc.perform(put("/games/{id}", nonExistingId)
+				mockMvc.perform(put(URI + "/{id}", nonExistingId)
 					.content(jsonBody)
 					.contentType(MediaType.APPLICATION_JSON)
 					.accept(MediaType.APPLICATION_JSON));
@@ -144,7 +145,7 @@ public class GameControllerTests {
 	public void findAllShouldReturnPage() throws Exception {
 		
 		ResultActions result = 
-				mockMvc.perform(get("/games")
+				mockMvc.perform(get(URI)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
@@ -154,7 +155,7 @@ public class GameControllerTests {
 	public void findByIdShouldReturnGameWhenIdExists() throws Exception {
 		
 		ResultActions result = 
-				mockMvc.perform(get("/games/{id}", existingId)
+				mockMvc.perform(get(URI + "/{id}", existingId)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isOk());
@@ -167,7 +168,7 @@ public class GameControllerTests {
 	public void findByIdShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
 		
 		ResultActions result = 
-				mockMvc.perform(get("/games/{id}", nonExistingId)
+				mockMvc.perform(get(URI + "/{id}", nonExistingId)
 					.accept(MediaType.APPLICATION_JSON));
 		
 		result.andExpect(status().isNotFound());
