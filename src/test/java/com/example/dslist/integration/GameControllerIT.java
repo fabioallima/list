@@ -56,7 +56,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void findAllShouldReturnSortedPageWhenSortByName() throws Exception {
+	public void findAll_ShouldReturnSortedPage_WhenSortByTitle() throws Exception {
 		ResultActions result = mockMvc
 				.perform(MockMvcRequestBuilders.get(URI+"?page=0&size=12&sort=title,asc").accept(MediaType.APPLICATION_JSON));
 
@@ -72,7 +72,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void findByIdShouldReturnGameDTOWhenIdExists() throws Exception {
+	public void findById_ShouldReturnGameDTO_WhenIdExists() throws Exception {
 		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", existingId)
 				.accept(MediaType.APPLICATION_JSON));
 
@@ -83,7 +83,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void findByIdShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
+	public void findById_ShouldReturnNotFound_WhenIdDoesNotExist() throws Exception {
 		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.get(URI + "/{id}", nonExistingId)
 				.accept(MediaType.APPLICATION_JSON));
 
@@ -91,7 +91,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void insertShouldReturnCreatedAndGameDTOWhenDataIsValid() throws Exception {
+	public void insert_ShouldReturnCreatedAndGameDTO_WhenDataIsValid() throws Exception {
 		GameDTO gameDTO = GameFactory.createGameDTO();
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
 
@@ -108,7 +108,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void insertShouldReturnUnauthorizedWhenNoToken() throws Exception {
+	public void insert_ShouldReturnUnauthorized_WhenNoToken() throws Exception {
 		GameDTO gameDTO = GameFactory.createGameDTO();
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
 
@@ -121,7 +121,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void updateShouldReturnGameDTOWhenIdExists() throws Exception {
+	public void update_ShouldReturnGameDTO_WhenIdExists() throws Exception {
 
 		GameDTO gameDTO = GameFactory.createGameDTO();
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
@@ -143,7 +143,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void updateShouldReturnNotFoundWhenIdDoesNotExist() throws Exception {
+	public void update_ShouldReturnNotFound_WhenIdDoesNotExist() throws Exception {
 
 		GameDTO gameDTO = GameFactory.createGameDTO();
 		String jsonBody = objectMapper.writeValueAsString(gameDTO);
@@ -158,7 +158,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void deleteShouldReturnNoContentWhenIdExists() throws Exception {
+	public void delete_ShouldReturnNoContent_WhenIdExists() throws Exception {
 		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/{id}", existingId)
 				.header("Authorization", "Bearer " + bearerToken)
 				.accept(MediaType.APPLICATION_JSON));
@@ -167,7 +167,7 @@ public class GameControllerIT {
 	}
 
 	@Test
-	public void deleteShouldReturnUnauthorizedWhenNoToken() throws Exception {
+	public void delete_ShouldReturnUnauthorized_WhenNoToken() throws Exception {
 		ResultActions result = mockMvc.perform(MockMvcRequestBuilders.delete(URI + "/{id}", existingId)
 				.accept(MediaType.APPLICATION_JSON));
 

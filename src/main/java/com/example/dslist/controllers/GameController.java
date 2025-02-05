@@ -68,7 +68,7 @@ public class GameController {
         return result;
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_OPERATOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping
     public ResponseEntity<GameDTO> insert(@Valid @RequestBody GameDTO dto){
         GameDTO gameDTO = gameService.insert(dto);
@@ -76,7 +76,7 @@ public class GameController {
         return ResponseEntity.created(uri).body(gameDTO);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_OPERATOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping(value = "/{id}")
     public ResponseEntity<GameDTO> update(@PathVariable Long id, @RequestBody @Valid GameDTO dto) {
         GameDTO gameDTO = gameService.update(id, dto);
@@ -84,7 +84,7 @@ public class GameController {
         return ResponseEntity.ok().body(gameDTO);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_OPERATOR', 'ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         gameService.delete(id);
