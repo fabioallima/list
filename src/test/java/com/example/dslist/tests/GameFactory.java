@@ -6,9 +6,13 @@ import com.example.dslist.dto.GamesListMinDTO;
 import com.example.dslist.entities.Game;
 import com.example.dslist.entities.GameList;
 
+import java.time.LocalDateTime;
+
+import static java.time.LocalTime.now;
+
 public class GameFactory {
     public static Game createGame() {
-        return new Game(1L, "Jogo Teste", 2022, "Gênero Teste", "Plataforma Teste", 4.5, "Descrição Curta Teste", "Descrição Longa Teste", "http://teste.com/imagem.jpg");
+        return new Game(1L, "Jogo Teste", 2022, "Gênero Teste", "Plataforma Teste", 4.5, "Descrição Curta Teste", "Descrição Longa Teste", "http://teste.com/imagem.jpg", "Test", LocalDateTime.now(), "Test", LocalDateTime.now());
     }
 
 
