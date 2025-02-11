@@ -20,10 +20,11 @@ public class SpringSecurityAuditorAware implements AuditorAware<String> {
         }
 
         String username = null;
-
-        if (authentication.getPrincipal() instanceof Jwt) {
-            Jwt jwt = (Jwt) authentication.getPrincipal();
+        if (authentication.getPrincipal() instanceof Jwt jwt) {
             username = jwt.getClaim("username");
+        }
+        if (username == null) {
+            username = authentication.getName();
         }
 
         if (username == null) {

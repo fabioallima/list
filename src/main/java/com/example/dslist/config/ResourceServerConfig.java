@@ -8,13 +8,16 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.authorization.AuthorizationDecision;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.IpAddressMatcher;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -34,9 +37,19 @@ public class ResourceServerConfig {
 	@Profile({"dev", "test"})
 	@Order(1)
 	SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
-
-		http.securityMatcher(PathRequest.toH2Console()).csrf(csrf -> csrf.disable())
-				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
+		http
+				.securityMatcher(PathRequest.toH2Console())
+				// Desabilita CSRF para o console H2 em ambientes de dev/test
+				// Isso é necessário para o funcionamento correto do console H2
+				.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
+				.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(PathRequest.toH2Console())
+						.access((authentication, context) -> {
+							IpAddressMatcher localhost = new IpAddressMatcher("127.0.0.1");
+							return new AuthorizationDecision(localhost.matches(context.getRequest()));
+						})
+				);
 		return http.build();
 	}
 
