@@ -22,8 +22,9 @@ public class CustomPasswordAuthenticationToken extends OAuth2AuthorizationGrantA
 			@Nullable Set<String> scopes, @Nullable Map<String, Object> additionalParameters) {
 		
 		super(new AuthorizationGrantType("password"), clientPrincipal, additionalParameters);
-		
-		this.username = (String) additionalParameters.get("username");
+
+        assert additionalParameters != null;
+        this.username = (String) additionalParameters.get("username");
 		this.password = (String) additionalParameters.get("password");
 		this.scopes = Collections.unmodifiableSet(
 				scopes != null ? new HashSet<>(scopes) : Collections.emptySet());

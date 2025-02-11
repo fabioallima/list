@@ -43,6 +43,7 @@
 		<sonar.language>java</sonar.language>
 		<sonar.coverage.exclusions>
 			**/DslistApplication.java,
+			**/audit/**,
 			**/config/**,
 			**/entities/**,
 			**/dto/**,
