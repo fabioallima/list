@@ -37,19 +37,8 @@ public class ResourceServerConfig {
 	@Profile({"dev", "test"})
 	@Order(1)
 	SecurityFilterChain h2SecurityFilterChain(HttpSecurity http) throws Exception {
-		http
-				.securityMatcher(PathRequest.toH2Console())
-				// Desabilita CSRF para o console H2 em ambientes de dev/test
-				// Isso é necessário para o funcionamento correto do console H2
-				.csrf(csrf -> csrf.ignoringRequestMatchers(PathRequest.toH2Console()))
-				.headers(headers -> headers.frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin))
-				.authorizeHttpRequests(auth -> auth
-						.requestMatchers(PathRequest.toH2Console())
-						.access((authentication, context) -> {
-							IpAddressMatcher localhost = new IpAddressMatcher("127.0.0.1");
-							return new AuthorizationDecision(localhost.matches(context.getRequest()));
-						})
-				);
+		http.securityMatcher(PathRequest.toH2Console()).csrf(csrf -> csrf.disable())
+				.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.disable()));
 		return http.build();
 	}
 
